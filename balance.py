@@ -15,7 +15,8 @@ def balance_ds(label_to_name: dict, label_counts: dict, abs_network_path: str, a
         how_many = max_generate - int(label_counts[label])
         where = abs_out_dir + os.path.sep + label_to_name[label]
         if how_many > 0:
-            generate_images(network_pkl=abs_network_path, seeds=list(range(how_many)), outdir=where, class_idx=label)
+            generate_images(
+                ["--network", abs_network_path, "--seeds", f"0-{how_many}", "--outdir", where, "--class", label])
 
 
 @click.command()

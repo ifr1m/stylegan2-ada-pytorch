@@ -12,11 +12,17 @@ def balance_ds(label_to_name: dict, label_counts: dict, abs_network_path: str, a
                amplifier: float = 1.0):
     max_generate = math.ceil(max(label_counts.values()) * amplifier)
     for label in label_counts:
-        how_many = max_generate - int(label_counts[label])
+        current_count = int(label_counts[label])
+        how_many = max_generate - current_count
         where = abs_out_dir + os.path.sep + label_to_name[label]
         if how_many > 0:
-            generate_images(
-                ["--network", abs_network_path, "--seeds", f"0-{how_many}", "--outdir", where, "--class", label])
+            print(
+                f"Generating {how_many} images for label={label} ({label_to_name[label]}). Current label count {current_count}. Max per label: {max_generate}. ")
+            try:
+                generate_images(
+                    ["--network", abs_network_path, "--seeds", f"0-{how_many}", "--outdir", where, "--class", label])
+            except:
+                pass
 
 
 @click.command()

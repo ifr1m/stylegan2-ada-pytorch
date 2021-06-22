@@ -26,8 +26,9 @@ def balance_ds(label_to_name: dict, label_counts: dict, abs_network_path: str, a
 def balance(for_sg2ada_zip_path: str, abs_network_path: str, abs_out_dir: str, amplifier: float = 1.0):
     with ZipFile(for_sg2ada_zip_path, 'r') as zip:
         with zip.open('dataset.json', 'r') as dataset_json:
-            label_to_name = json.load(dataset_json)['label_to_name']
-            label_counts = json.load(dataset_json)['label_counts']
+            obj = json.load(dataset_json)
+            label_to_name = obj['label_to_name']
+            label_counts = obj['label_counts']
     balance_ds(label_to_name, label_counts, abs_network_path, abs_out_dir, amplifier)
 
 

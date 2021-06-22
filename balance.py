@@ -12,7 +12,7 @@ def balance_ds(label_to_name: dict, label_counts: dict, abs_network_path: str, a
                amplifier: float = 1.0):
     max_generate = math.ceil(max(label_counts.values()) * amplifier)
     for label in label_counts:
-        how_many = max_generate - label_counts[label]
+        how_many = max_generate - int(label_counts[label])
         where = abs_out_dir + os.path.sep + label_to_name[label]
         if how_many > 0:
             generate_images(network_pkl=abs_network_path, seeds=list(range(how_many)), outdir=where, class_idx=label)

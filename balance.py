@@ -25,13 +25,14 @@ def balance_ds(label_to_name: dict, label_counts: dict, abs_network_path: str, a
                     ["--network", abs_network_path, "--seeds", f"0-{how_many}", "--outdir", where, "--class", label])
             except:
                 pass
-    rename_to_unique_names(abs_out_dir,  "*.png")
+    rename_to_unique_names(abs_out_dir, "*.png")
+
 
 def rename_to_unique_names(root_path: str, ext: str):
     r = Path(root_path)
     paths = list(r.rglob(ext))
     for p in paths:
-        p.rename(p.with_name(str(uuid.uuid4()) + p.suffix))
+        p.rename(p.with_name(p.stem + '_' + str(uuid.uuid4()) + p.suffix))
 
 
 @click.command()

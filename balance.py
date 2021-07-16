@@ -2,6 +2,7 @@ import json
 import math
 import os
 import uuid
+import zipfile
 from pathlib import Path
 from zipfile import ZipFile
 
@@ -35,6 +36,19 @@ def rename_to_unique_names(root_path: str, ext: str):
         p.rename(p.with_name(p.stem + '_' + str(uuid.uuid4()) + p.suffix))
 
 
+def zip_dir(zip_path: Path, dir_to_zip: Path):
+    zip_p = zip_path.expanduser().resolve()
+    dir_p = dir_to_zip.expanduser().resolve()
+    if zip_p.is_dir():
+        zip_name = dir_p.stem + ".zip"
+        zip_p = zip_p / zip_name
+    with zipfile.ZipFile(str(zip_p), 'w', zipfile.ZIP_DEFLATED) as zipf:
+        for file in dir_p.rglob("*"):
+            if file.is_file():
+                zip_path = file.relative_to(dir_to_zip.parent)
+                zipf.write(str(file), str(zip_path))
+
+
 @click.command()
 @click.option('--zip_path', 'for_sg2ada_zip_path', type=str, required=True)
 @click.option('--network', 'abs_network_path', type=str, required=True)
@@ -47,6 +61,8 @@ def balance(for_sg2ada_zip_path: str, abs_network_path: str, abs_out_dir: str, a
             label_to_name = obj['label_to_name']
             label_counts = obj['label_counts']
     balance_ds(label_to_name, label_counts, abs_network_path, abs_out_dir, amplifier)
+    to_zip = Path(abs_out_dir)
+    zip_dir(to_zip.parent, to_zip)
 
 
 if __name__ == '__main__':
